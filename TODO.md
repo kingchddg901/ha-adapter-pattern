@@ -83,6 +83,28 @@ When to write this up:
   ground truth, with the card (or HA itself, via a user-configurable
   "expose as entity" mechanism) deciding what gets surfaced, is the
   only design that survives user-specific access patterns.
+- **Automation users want trigger access to *everything*, even niche
+  state.** HA's user base is weird in the best way. Someone, somewhere,
+  wants an automation that fires "when room D is configured for 2
+  passes + high water." The integration author would never build
+  per-room-per-attribute entities for that — it's a fringe use case
+  that doesn't justify the entity explosion. But the *automation* has
+  to be possible, or you've quietly locked out a legitimate HA-user
+  workflow.
+
+  The escape hatch is **structured attributes on the parent entity**.
+  In this integration, the vacuum entity carries a `rooms` attribute
+  with the full per-room state dict. Service-backed storage is the
+  source of truth; the parent entity's attribute mirrors it. Automations
+  can trigger on that attribute via template triggers (awkwardly, but
+  it works). Templates can read it. Voice can't (yet), but most uses
+  can. So the dichotomy was never really "service OR entity" — it was
+  "service-backed storage with a structured-attribute window into it
+  from the parent entity." That window is what preserves HA's
+  template-and-trigger power without per-attribute entity explosion.
+
+  This is the missing piece. The article should foreground it rather
+  than treating entities and services as exclusive options.
 - **Storage shapes behavior, not just reflects it.** An entity with a
   slider in the UI invites users to tweak. A service requires intent
   to invoke. Making something an entity creates an attractor for
