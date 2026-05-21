@@ -36,6 +36,38 @@ the UI yourself. If you're not in that exact corner — building a card
 with high-arity per-object config — you probably shouldn't be looking
 at this pattern. The default exists for good reasons.
 
+**Meta: the development order was backwards from conventional advice.**
+Standard engineering wisdom says model the data first, then build the
+API, then put the UI on top. This project went the opposite direction:
+the system existed → the card was built on top → the card's needs drove
+the backend complexity. Each "I need to render per-room settings in a
+grid" pulled a structured storage shape behind it. Each "I want
+drag-and-drop ordering" pulled an `order` attribute and a queue
+rebuilder. Each "show learning insights" pulled a trace capture and
+analysis pipeline. The 75 services are not a designed API surface —
+they're the accumulated artifact of the card needing things and the
+backend growing to provide them.
+
+This is **product-led / frontend-driven development**, and it's
+disparaged in API-first culture. In this case it was correct, because:
+  - The card is the only realistic consumer (no third-party integrators
+    competing for API attention)
+  - Each backend feature has a concrete frontend justification, so
+    nothing is built speculatively
+  - Iteration is cheap when you control both ends
+
+The tradeoff: the backend has weird shapes that exist only because the
+card happened to want them. The services aren't a clean general-purpose
+API; they're the services *this card* needed, in the order it needed
+them. Anyone trying to use the integration without the card hits that
+shape and finds it confusing.
+
+This is fine for a one-author project shipping its own UI. It is **not**
+a recommendation for multi-author projects, libraries, or anything
+other people extend. For those, API-first / model-first remains correct.
+The pattern in this guide is a description of what *worked here*, not
+a prescription for what to do generally.
+
 When to write this up:
 - The right framing isn't "services beat entities," it's "**how often
   does this attribute change, and who changes it?**"
