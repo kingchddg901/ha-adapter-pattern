@@ -70,6 +70,19 @@ When to write this up:
   card surfacing whichever access pattern the user wants. The
   service-as-storage layer is the source of truth; specific attributes
   can also be exposed as entities for users who want HA-native tweaking.
+- **Different users tweak different attributes, and the author can't
+  predict which.** The author cares about `path_type` because runtime
+  matters to them. Another user cares about `clean_mode` because they
+  switch between vacuum-only and vacuum-mop seasonally. A third
+  rearranges `order` constantly while leaving everything else alone.
+  A fourth never touches any of it. The integration author has zero
+  visibility into which attribute will be "hot" for any given install,
+  which means they *cannot* statically pre-promote N of M attributes
+  to entities and leave the rest as services. Every static choice is
+  wrong for some non-trivial slice of users. Service-as-storage as the
+  ground truth, with the card (or HA itself, via a user-configurable
+  "expose as entity" mechanism) deciding what gets surfaced, is the
+  only design that survives user-specific access patterns.
 - **Storage shapes behavior, not just reflects it.** An entity with a
   slider in the UI invites users to tweak. A service requires intent
   to invoke. Making something an entity creates an attractor for
