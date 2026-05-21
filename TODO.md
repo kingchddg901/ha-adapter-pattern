@@ -49,6 +49,23 @@ When to write this up:
   mutation that wouldn't otherwise exist. So the choice isn't neutral
   — it's partly self-fulfilling. If you don't *want* users tweaking
   this daily, don't put it behind a slider.
+- **The pattern is rare for a reason.** Entities buy you a lot for
+  free: state history, template access, automation triggers, voice
+  addressability, Lovelace rendering, areas/labels, the registry's
+  built-in tooling. Service-as-storage walks away from all of it.
+  That cost is only acceptable when you've replaced it with something
+  better — typically a custom card you ship alongside. Most integration
+  authors don't ship a card, so the entity model is correct for them
+  by default. Service-as-storage isn't a better mousetrap; it's a
+  different shape with prerequisites.
+- **Prerequisites for choosing service-as-storage:**
+  1. You ship (or accept hard dependency on) a card / custom UI
+  2. The configured objects have high arity × wide attribute set
+  3. Steady-state mutation frequency is low (set-once-per-install)
+  4. You don't need state history, templates, or voice on the config
+     (or you can synthesize them where needed)
+  When fewer of these hold, the entity model is the right default —
+  even if the abstract attribute *could* be modeled as services.
 - Use eufy-vacuum-manager as the case study: per-room *order* is an
   entity (frequently mutated, automation-target). Per-room *fan_speed*
   is service-backed config (rarely mutated, "set once"). Same domain,
