@@ -19,6 +19,20 @@ The eufy-vacuum-manager pattern is itself counterintuitive — services
 historically mean "actions you trigger," not "the storage layer your
 config lives in." But for high-arity configuration it's the leaner shape.
 
+**Origin story (must include).** This pattern wasn't reached from first
+principles. It was forced. The author was building a card for a vacuum
+integration, hit "10 rooms × 10+ per-room settings = 100+ entities,"
+and the entity model collapsed before any architectural decision was
+made. Service-as-storage wasn't chosen *over* entities — it was what
+remained after the entity approach proved unworkable.
+
+That's the honest framing readers need. The pattern isn't a better
+mousetrap discovered through careful design; it's what happens when
+the default model breaks under load and you happen to also be shipping
+the UI yourself. If you're not in that exact corner — building a card
+with high-arity per-object config — you probably shouldn't be looking
+at this pattern. The default exists for good reasons.
+
 When to write this up:
 - The right framing isn't "services beat entities," it's "**how often
   does this attribute change, and who changes it?**"
