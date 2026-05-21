@@ -37,6 +37,18 @@ When to write this up:
   for rarely-mutated config (55+ entities of dead weight), but doesn't
   flip the rule on its own. A single rarely-mutated attribute is still
   fine as one entity if you want one for it.
+- **Theoretical mutability ≠ actual mutation.** In a stable household,
+  per-room cleaning settings are configured once during onboarding and
+  then sit untouched for years. The attribute *could* change daily in
+  theory; in practice, "Bathroom is hardwood, give it Quiet+Low" is
+  set on day one and that's it. Use *steady-state* mutation frequency
+  in a real install, not theoretical mutability, to decide.
+- **Storage shapes behavior, not just reflects it.** An entity with a
+  slider in the UI invites users to tweak. A service requires intent
+  to invoke. Making something an entity creates an attractor for
+  mutation that wouldn't otherwise exist. So the choice isn't neutral
+  — it's partly self-fulfilling. If you don't *want* users tweaking
+  this daily, don't put it behind a slider.
 - Use eufy-vacuum-manager as the case study: per-room *order* is an
   entity (frequently mutated, automation-target). Per-room *fan_speed*
   is service-backed config (rarely mutated, "set once"). Same domain,
