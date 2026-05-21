@@ -60,6 +60,16 @@ When to write this up:
   theory; in practice, "Bathroom is hardwood, give it Quiet+Low" is
   set on day one and that's it. Use *steady-state* mutation frequency
   in a real install, not theoretical mutability, to decide.
+- **Mutation profiles vary by user, not by attribute.** Within the same
+  per-room cleaning setting list, one user sets everything once and
+  forgets. Another (the author of this integration) tweaks `path_type`
+  frequently because it has a huge effect on run time. Same attribute,
+  same integration, opposite mutation profiles. This means you can't
+  globally categorize attributes as "service" or "entity" — the right
+  design lets the *same* attribute be reachable both ways, with the
+  card surfacing whichever access pattern the user wants. The
+  service-as-storage layer is the source of truth; specific attributes
+  can also be exposed as entities for users who want HA-native tweaking.
 - **Storage shapes behavior, not just reflects it.** An entity with a
   slider in the UI invites users to tweak. A service requires intent
   to invoke. Making something an entity creates an attractor for
