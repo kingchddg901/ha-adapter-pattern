@@ -21,10 +21,13 @@ config lives in." But for high-arity configuration it's the leaner shape.
 
 **Origin story (must include).** This pattern wasn't reached from first
 principles. It was forced. The author was building a card for a vacuum
-integration, hit "10 rooms × 10+ per-room settings = 100+ entities,"
-and the entity model collapsed before any architectural decision was
-made. Service-as-storage wasn't chosen *over* entities — it was what
-remained after the entity approach proved unworkable.
+integration with 10 rooms and 8 per-room attributes (water level, clean
+mode, suction, path type, edge mopping, pass count, queue order, and a
+"selected for next job" boolean) → 80 entities just for room
+configuration, before any sensor or status entity. The entity model
+collapsed before any architectural decision was made.
+Service-as-storage wasn't chosen *over* entities — it was what remained
+after the entity approach proved unworkable.
 
 That's the honest framing readers need. The pattern isn't a better
 mousetrap discovered through careful design; it's what happens when
