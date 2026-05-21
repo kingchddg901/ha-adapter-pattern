@@ -20,11 +20,27 @@ historically mean "actions you trigger," not "the storage layer your
 config lives in." But for high-arity configuration it's the leaner shape.
 
 When to write this up:
-- The right framing isn't "services beat entities," it's "what's the
-  arity of your config surface, and does the entity registry make sense
-  as the storage?"
-- Use eufy-vacuum-manager as one concrete case study, ideally pair it
-  with a counter-example where entities are unambiguously right.
+- The right framing isn't "services beat entities," it's "**how often
+  does this attribute change, and who changes it?**"
+  - Frequently mutated, especially via automations / dashboards / voice
+    → entity (you want history, state tracking, automation triggers,
+    template access, the UI affordances HA already gives you for free).
+    Example: per-room *order* in a clean queue — users drag-rearrange
+    constantly, automations might bump priority, voice might say
+    "clean Kitchen first." Entity is unambiguously right.
+  - Rarely mutated, "set once per install" config → service /
+    structured storage. No reason to pay the entity registry tax for
+    something that almost never changes. Example: per-room cleaning
+    parameters (Bathroom = Quiet because hardwood, set once, stays
+    forever).
+- Arity is a secondary factor — high arity *amplifies* the entity cost
+  for rarely-mutated config (55+ entities of dead weight), but doesn't
+  flip the rule on its own. A single rarely-mutated attribute is still
+  fine as one entity if you want one for it.
+- Use eufy-vacuum-manager as the case study: per-room *order* is an
+  entity (frequently mutated, automation-target). Per-room *fan_speed*
+  is service-backed config (rarely mutated, "set once"). Same domain,
+  different mutation profiles, different storage choices.
 - Think about whether this is its own section or fits inside the
   "Storage decoupling" section (§10) of the main guide.
 
